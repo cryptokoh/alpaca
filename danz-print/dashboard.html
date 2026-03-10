@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Printer Dashboard — Alpaca3D</title>
+  <meta name="description" content="Alpaca3D mock printer dashboard. Monitor print progress, temperatures, G-code, and console output in demo mode.">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <!-- PERSISTENT WIREFRAME BACKGROUND -->
+  <canvas id="wireframe-bg"></canvas>
+
+  <!-- NAV -->
+  <nav id="site-nav">
+    <a href="index.html" class="nav-logo">Alpaca3D</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <section style="padding-top:7rem;">
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;">
+        <div class="section-label" style="margin-bottom:0;">Dashboard</div>
+        <span class="demo-badge">DEMO MODE</span>
+      </div>
+      <h2 class="section-title">Printer Control Center</h2>
+      <p class="section-desc">Monitor and control your AD5M Pro in real-time. All data below is simulated for demonstration.</p>
+
+      <!-- Status Cards Grid -->
+      <div class="dashboard-grid">
+
+        <!-- Card 1: Printer Status -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <span class="dash-card-title">Printer Status</span>
+            <span class="status-indicator online" id="status-dot"></span>
+          </div>
+          <div class="dash-status" id="printer-status">Printing</div>
+          <div class="dash-file" id="current-file">geometric_vase_v3.gcode</div>
+        </div>
+
+        <!-- Card 2: Progress (SVG circular gauge) -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <span class="dash-card-title">Print Progress</span>
+          </div>
+          <div class="progress-gauge">
+            <svg viewBox="0 0 120 120" class="gauge-svg">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--g1)"/>
+                  <stop offset="50%" stop-color="var(--g2)"/>
+                  <stop offset="100%" stop-color="var(--g3)"/>
+                </linearGradient>
+              </defs>
+              <circle cx="60" cy="60" r="54" class="gauge-bg"/>
+              <circle cx="60" cy="60" r="54" class="gauge-fill" id="gauge-fill"/>
+            </svg>
+            <div class="gauge-text" id="gauge-text">67%</div>
+          </div>
+          <div class="dash-time" id="time-remaining">Est. 1h 42m remaining</div>
+        </div>
+
+        <!-- Card 3: Temperatures -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <span class="dash-card-title">Temperatures</span>
+          </div>
+          <div class="temp-row">
+            <span>Hotend</span>
+            <span class="temp-val" id="temp-hotend">215&deg;C</span>
+            <div class="temp-bar"><div class="temp-bar-fill hotend" id="temp-hotend-bar" style="width:77%"></div></div>
+          </div>
+          <div class="temp-row">
+            <span>Bed</span>
+            <span class="temp-val" id="temp-bed">60&deg;C</span>
+            <div class="temp-bar"><div class="temp-bar-fill bed" id="temp-bed-bar" style="width:50%"></div></div>
+          </div>
+        </div>
+
+        <!-- Card 4: Quick Actions -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <span class="dash-card-title">Controls</span>
+          </div>
+          <div class="dash-actions">
+            <button class="btn btn-secondary dash-btn" id="btn-pause">Pause</button>
+            <button class="btn btn-secondary dash-btn" id="btn-stop">Stop</button>
+            <button class="btn btn-secondary dash-btn" id="btn-home">Home</button>
+            <button class="btn btn-secondary dash-btn" id="btn-cooldown">Cooldown</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- G-code Preview -->
+      <div class="dash-card gcode-card">
+        <div class="dash-card-header">
+          <span class="dash-card-title">G-code Preview</span>
+        </div>
+        <div class="gcode-preview" id="gcode-preview"></div>
+      </div>
+
+      <!-- Console Output -->
+      <div class="dash-card console-card">
+        <div class="dash-card-header">
+          <span class="dash-card-title">Console</span>
+        </div>
+        <div class="console-output" id="console-output"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="footer-brand">Alpaca3D</div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">Built with Claude Code. Powered by caffeine and filament.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/alpaca/alpaca-builder.js"></script>
+  <script src="js/alpaca/alpaca-particles.js"></script>
+  <script src="js/alpaca/alpaca-scene.js"></script>
+  <script src="js/shared/nav.js"></script>
+  <script src="js/shared/scroll-effects.js"></script>
+  <script src="js/dashboard/dashboard.js"></script>
+
+</body>
+</html>

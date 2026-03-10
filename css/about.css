@@ -1,0 +1,253 @@
+/* ── ABOUT PAGE ──
+   Storytelling layout, philosophy cards, why-alpaca section.
+*/
+
+/* ── About story content ── */
+.about-story {
+  max-width: 700px;
+  margin: 0 auto 4rem;
+}
+
+.about-story p {
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.about-story strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── Gradient heading ── */
+.about-hero-title {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--g1) 0%, var(--g2) 35%, var(--g3) 70%, var(--g4) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Stack expanded section ── */
+.stack-expanded-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stack-expanded-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.stack-expanded-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.stack-expanded-card:nth-child(1)::before { background: linear-gradient(90deg, var(--g1), var(--g2)); }
+.stack-expanded-card:nth-child(2)::before { background: linear-gradient(90deg, var(--g2), var(--g3)); }
+.stack-expanded-card:nth-child(3)::before { background: linear-gradient(90deg, var(--g3), var(--g4)); }
+
+.stack-expanded-card:hover {
+  border-color: var(--g2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stack-expanded-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.stack-expanded-card:nth-child(1) .stack-expanded-icon { background: rgba(108, 43, 217, 0.15); }
+.stack-expanded-card:nth-child(2) .stack-expanded-icon { background: rgba(224, 64, 251, 0.15); }
+.stack-expanded-card:nth-child(3) .stack-expanded-icon { background: rgba(0, 229, 255, 0.15); }
+
+.stack-expanded-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.stack-expanded-card p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.stack-expanded-card p:last-child {
+  margin-bottom: 0;
+}
+
+.stack-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stack-detail-list li {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding: 0.3rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.stack-detail-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.stack-expanded-card:nth-child(1) .stack-detail-list li::before { background: var(--g1); }
+.stack-expanded-card:nth-child(2) .stack-detail-list li::before { background: var(--g2); }
+.stack-expanded-card:nth-child(3) .stack-detail-list li::before { background: var(--g3); }
+
+/* ── Philosophy grid ── */
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.philosophy-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.philosophy-card:hover {
+  border-color: var(--g2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.philosophy-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1.25rem;
+}
+
+.philosophy-card:nth-child(1) .philosophy-icon { background: rgba(108, 43, 217, 0.15); }
+.philosophy-card:nth-child(2) .philosophy-icon { background: rgba(224, 64, 251, 0.15); }
+.philosophy-card:nth-child(3) .philosophy-icon { background: rgba(0, 229, 255, 0.15); }
+
+.philosophy-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.philosophy-card p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ── Why alpaca section ── */
+.why-alpaca {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.why-alpaca-text h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.why-alpaca-text p {
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.why-alpaca-canvas-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.why-alpaca canvas,
+#mini-alpaca {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  border-radius: var(--radius);
+  border: 1px solid var(--card-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ── About CTA ── */
+.about-cta {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.about-cta .hero-cta {
+  margin-top: 2rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .why-alpaca {
+    grid-template-columns: 1fr;
+  }
+
+  .why-alpaca-canvas-wrap {
+    order: -1;
+  }
+
+  .about-hero-title {
+    letter-spacing: -1px;
+  }
+
+  .stack-expanded-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+  }
+}

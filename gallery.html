@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Print Gallery — Alpaca3D</title>
+  <meta name="description" content="Browse the Alpaca3D print gallery. Functional parts, art pieces, and figurines — all produced through the AI-powered 3D printing pipeline.">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+
+  <!-- PERSISTENT WIREFRAME BACKGROUND -->
+  <canvas id="wireframe-bg"></canvas>
+
+  <!-- NAV -->
+  <nav id="site-nav">
+    <a href="index.html" class="nav-logo">Alpaca3D</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- GALLERY -->
+  <section style="padding-top:7rem;">
+    <div class="container">
+      <div class="section-label">Gallery</div>
+      <h2 class="section-title">Print Gallery</h2>
+      <p class="section-desc">A showcase of 3D prints from the Alpaca3D pipeline. Filter by category, click any card for full details.</p>
+
+      <div class="gallery-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="functional">Functional</button>
+        <button class="filter-btn" data-filter="art">Art</button>
+        <button class="filter-btn" data-filter="figurines">Figurines</button>
+      </div>
+
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container fade-in">
+      <div class="section-label">Contribute</div>
+      <h2 class="section-title">Got a print to share?</h2>
+      <p class="section-desc">Submit your Alpaca3D prints to the gallery via GitHub pull request.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/cryptokoh/alpacca3d" class="btn btn-primary" target="_blank">Submit a Print</a>
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">&times;</button>
+      <div id="lightbox-body"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="footer-brand">Alpaca3D</div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">Built with Claude Code. Powered by caffeine and filament.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/alpaca/alpaca-builder.js"></script>
+  <script src="js/alpaca/alpaca-particles.js"></script>
+  <script src="js/alpaca/alpaca-scene.js"></script>
+  <script src="js/shared/nav.js"></script>
+  <script src="js/shared/scroll-effects.js"></script>
+  <script src="js/gallery/gallery-data.js"></script>
+  <script src="js/gallery/gallery.js"></script>
+
+</body>
+</html>

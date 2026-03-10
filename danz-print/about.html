@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Alpaca3D</title>
+  <meta name="description" content="The story behind Alpaca3D. How Claude Code, a Flashforge printer, and maker spirit came together to build an AI-powered 3D printing pipeline.">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+
+  <!-- PERSISTENT WIREFRAME BACKGROUND -->
+  <canvas id="wireframe-bg"></canvas>
+
+  <!-- NAV -->
+  <nav id="site-nav">
+    <a href="index.html" class="nav-logo">Alpaca3D</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section style="padding-top:7rem;padding-bottom:2rem;">
+    <div class="container fade-in" style="text-align:center;">
+      <div class="section-label">About</div>
+      <h1 class="about-hero-title">The Story Behind Alpaca3D</h1>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">A maker project born from curiosity, Claude Code, and a really fast printer.</p>
+    </div>
+  </section>
+
+  <!-- ORIGIN STORY -->
+  <section style="padding-top:2rem;">
+    <div class="container fade-in">
+      <div class="about-story">
+        <p>
+          It started with a simple question: <strong>what happens when you point an AI at a 3D printer and let it figure things out?</strong> Not a hypothetical research paper question. A real one, with real filament, real failed prints, and a very real Flashforge AD5M Pro sitting on a desk.
+        </p>
+        <p>
+          Alpaca3D is the answer. It is a pipeline that connects <strong>Claude Code</strong> (an AI reasoning engine from Anthropic) to a <strong>Flashforge AD5M Pro</strong> running Klipper firmware, bridged by <strong>OpenClaw</strong> -- an open-source translation layer that converts high-level intent into low-level machine instructions.
+        </p>
+        <p>
+          The idea is not to automate makers out of the loop. It is to give them better tools. Describe what you want in natural language. Let the AI handle the tedious parameter tuning, the retraction settings, the temperature profiles. You focus on the design. The machine handles the math.
+        </p>
+        <p>
+          Every line of code in this project was written in the open. Every failed print was documented. Every breakthrough was shared. That is the maker way.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE STACK EXPANDED -->
+  <section>
+    <div class="container fade-in">
+      <div class="section-label">Deep Dive</div>
+      <h2 class="section-title">The Stack, Expanded</h2>
+      <p class="section-desc">Each layer of the Alpaca3D pipeline, explained in detail.</p>
+
+      <div class="stack-expanded-grid">
+
+        <div class="stack-expanded-card">
+          <div class="stack-expanded-icon">&#129302;</div>
+          <h3>Claude Code</h3>
+          <p>The intelligence layer. Claude Code acts as the reasoning engine that interprets your natural language descriptions and translates them into actionable 3D printing parameters.</p>
+          <ul class="stack-detail-list">
+            <li>Natural language to G-code parameter mapping</li>
+            <li>Print failure root cause analysis</li>
+            <li>Material-specific profile optimization</li>
+            <li>Iterative design refinement through conversation</li>
+            <li>Real-time troubleshooting during active prints</li>
+          </ul>
+        </div>
+
+        <div class="stack-expanded-card">
+          <div class="stack-expanded-icon">&#128268;</div>
+          <h3>OpenClaw</h3>
+          <p>The translation layer. OpenClaw is the open-source bridge between AI-generated intent and printer firmware commands. Think of it as a universal adapter.</p>
+          <ul class="stack-detail-list">
+            <li>Bi-directional communication with Klipper firmware</li>
+            <li>Real-time telemetry streaming (temps, position, flow)</li>
+            <li>G-code validation and safety checks</li>
+            <li>Multi-printer orchestration support</li>
+            <li>REST API for external tool integration</li>
+          </ul>
+        </div>
+
+        <div class="stack-expanded-card">
+          <div class="stack-expanded-icon">&#9881;&#65039;</div>
+          <h3>Flashforge AD5M Pro</h3>
+          <p>The fabrication layer. A high-speed CoreXY printer modified with Klipper firmware for maximum control and print speed.</p>
+          <ul class="stack-detail-list">
+            <li>600mm/s maximum print speed (CoreXY kinematics)</li>
+            <li>Automatic bed leveling with 25-point mesh</li>
+            <li>Filament runout detection and auto-pause</li>
+            <li>Network control via built-in WiFi</li>
+            <li>Camera-based first layer monitoring</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section>
+    <div class="container fade-in">
+      <div class="section-label">Philosophy</div>
+      <h2 class="section-title">What we believe</h2>
+      <p class="section-desc">The principles that guide every decision in the Alpaca3D project.</p>
+
+      <div class="philosophy-grid">
+
+        <div class="philosophy-card">
+          <div class="philosophy-icon">&#128275;</div>
+          <h3>Open Source</h3>
+          <p>Every line of code is public. Fork it, break it, make it yours. No paywalls, no premium tiers, no vendor lock-in. The best ideas grow when they are shared freely.</p>
+        </div>
+
+        <div class="philosophy-card">
+          <div class="philosophy-icon">&#129504;</div>
+          <h3>AI-Augmented</h3>
+          <p>Claude Code does not replace the maker -- it amplifies them. The AI handles parameter optimization, failure analysis, and the boring repetitive stuff. You handle the creative vision.</p>
+        </div>
+
+        <div class="philosophy-card">
+          <div class="philosophy-icon">&#128295;</div>
+          <h3>Maker-First</h3>
+          <p>Built by makers, for makers. No gatekeeping, no credentialism. If you have a printer and an idea, you have everything you need to contribute to this project.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY AN ALPACA? -->
+  <section>
+    <div class="container fade-in">
+      <div class="section-label">The Mascot</div>
+      <h2 class="section-title">Why an alpaca?</h2>
+
+      <div class="why-alpaca">
+        <div class="why-alpaca-text">
+          <h3>Glad you asked.</h3>
+          <p>
+            Alpacas are calm, curious, and surprisingly practical. They do not rush. They observe. They process. And when they are ready, they produce something incredibly useful -- fiber that is softer than cashmere and warmer than wool.
+          </p>
+          <p>
+            That is basically what this project does. It takes raw ideas, processes them through layers of intelligence, and produces something tangible. Also, alpacas are famously good at spitting when provoked, which felt like an appropriate metaphor for debugging 3D printer firmware at 2 AM.
+          </p>
+          <p>
+            Plus, "Alpaca3D" is just a great name. Try saying it out loud. You will smile. That counts for something.
+          </p>
+        </div>
+        <div class="why-alpaca-canvas-wrap">
+          <canvas id="mini-alpaca"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container fade-in about-cta">
+      <div class="section-label">Get Involved</div>
+      <h2 class="section-title">Ready to build with us?</h2>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">Alpaca3D is open source and always looking for contributors. Whether you print, code, or just have ideas -- jump in.</p>
+      <div class="hero-cta">
+        <a href="index.html" class="btn btn-primary">Explore the Playground</a>
+        <a href="https://github.com/cryptokoh/alpacca3d" class="btn btn-secondary" target="_blank">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="footer-brand">Alpaca3D</div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <p class="footer-copy">Built with Claude Code. Powered by caffeine and filament.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/alpaca/alpaca-builder.js"></script>
+  <script src="js/alpaca/alpaca-particles.js"></script>
+  <script src="js/alpaca/alpaca-scene.js"></script>
+  <script src="js/shared/nav.js"></script>
+  <script src="js/shared/scroll-effects.js"></script>
+
+  <!-- Mini alpaca scene for "Why an alpaca?" section -->
+  <script>
+    (function() {
+      'use strict';
+      /* Wait for alpaca modules to load, then init mini scene */
+      function tryInit() {
+        if (window.Alpaca3D && typeof window.Alpaca3D.initScene === 'function') {
+          window.Alpaca3D.initScene('mini-alpaca', {
+            particleCount: 30,
+            enableSpit: false
+          });
+        }
+      }
+      /* Try immediately, then retry after a short delay if modules haven't loaded */
+      if (document.readyState === 'complete') {
+        tryInit();
+      } else {
+        window.addEventListener('load', tryInit);
+      }
+      /* Fallback: if initScene is not available, render a static Three.js alpaca */
+      setTimeout(function() {
+        if (window.Alpaca3D && typeof window.Alpaca3D.initScene === 'function') return;
+        if (typeof THREE === 'undefined') return;
+
+        var canvas = document.getElementById('mini-alpaca');
+        if (!canvas) return;
+
+        var renderer;
+        try {
+          renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
+        } catch(e) { return; }
+
+        var w = canvas.clientWidth || 400;
+        var h = canvas.clientHeight || 300;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(w, h);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+        camera.position.set(0, 2, 10);
+        camera.lookAt(0, 1.5, 0);
+
+        function wireMat(color) {
+          return new THREE.MeshBasicMaterial({ color: color, wireframe: true, transparent: true, opacity: 0.7 });
+        }
+
+        var group = new THREE.Group();
+
+        /* Body */
+        var bodyGeo = new THREE.SphereGeometry(1.2, 14, 10);
+        bodyGeo.scale(1.2, 0.85, 0.8);
+        group.add(new THREE.Mesh(bodyGeo, wireMat(0x8b5cf6)));
+        group.children[0].position.set(0, 2, 0);
+
+        /* Neck */
+        var neckGeo = new THREE.CylinderGeometry(0.3, 0.4, 1.8, 8);
+        var neck = new THREE.Mesh(neckGeo, wireMat(0xc084fc));
+        neck.position.set(0.9, 3.2, 0);
+        neck.rotation.z = -0.25;
+        group.add(neck);
+
+        /* Head */
+        var headGeo = new THREE.SphereGeometry(0.5, 10, 8);
+        headGeo.scale(0.8, 0.9, 0.75);
+        var head = new THREE.Mesh(headGeo, wireMat(0xe879f9));
+        head.position.set(1.1, 4.2, 0);
+        group.add(head);
+
+        /* Ears */
+        var earGeo = new THREE.ConeGeometry(0.12, 0.45, 5);
+        var earL = new THREE.Mesh(earGeo, wireMat(0xe040fb));
+        earL.position.set(0.95, 4.65, 0.25);
+        earL.rotation.z = 0.3;
+        group.add(earL);
+        var earR = new THREE.Mesh(earGeo.clone(), wireMat(0xe040fb));
+        earR.position.set(0.95, 4.65, -0.25);
+        earR.rotation.z = 0.3;
+        group.add(earR);
+
+        /* Legs */
+        function makeLeg(x, z) {
+          var legGeo = new THREE.CylinderGeometry(0.14, 0.17, 1.6, 6);
+          var leg = new THREE.Mesh(legGeo, wireMat(0x7c3aed));
+          leg.position.set(x, 0.8, z);
+          return leg;
+        }
+        group.add(makeLeg(0.6, 0.3));
+        group.add(makeLeg(0.6, -0.3));
+        group.add(makeLeg(-0.6, 0.3));
+        group.add(makeLeg(-0.6, -0.3));
+
+        /* Tail */
+        var tailGeo = new THREE.SphereGeometry(0.28, 6, 5);
+        var tail = new THREE.Mesh(tailGeo, wireMat(0x76ff03));
+        tail.position.set(-1.3, 2.3, 0);
+        group.add(tail);
+
+        group.position.set(0, -1.8, 0);
+        scene.add(group);
+
+        /* Particles */
+        var pGeo = new THREE.BufferGeometry();
+        var pPos = new Float32Array(30 * 3);
+        for (var i = 0; i < 30; i++) {
+          pPos[i * 3] = (Math.random() - 0.5) * 12;
+          pPos[i * 3 + 1] = (Math.random() - 0.5) * 10;
+          pPos[i * 3 + 2] = (Math.random() - 0.5) * 6;
+        }
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        var pMat = new THREE.PointsMaterial({ color: 0x6c2bd9, size: 0.04, transparent: true, opacity: 0.5 });
+        scene.add(new THREE.Points(pGeo, pMat));
+
+        var clock = new THREE.Clock();
+        function animate() {
+          requestAnimationFrame(animate);
+          var t = clock.getElapsedTime();
+          group.rotation.y += 0.005;
+          group.position.y = -1.8 + Math.sin(t * 0.6) * 0.2;
+          renderer.render(scene, camera);
+        }
+        animate();
+      }, 1500);
+    })();
+  </script>
+
+</body>
+</html>
