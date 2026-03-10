@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpaca3D — AI-Powered 3D Printing</title>
+  <meta name="description" content="Where Claude Code meets Flashforge AD5M Pro. AI-driven 3D printing pipeline with OpenClaw integration.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --g1: #6c2bd9;
+      --g2: #e040fb;
+      --g3: #00e5ff;
+      --g4: #76ff03;
+      --bg: #0a0a0f;
+      --card: #14141f;
+      --card-border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-dim: #9898a8;
+      --radius: 16px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(10, 10, 15, 0.7);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--g1), var(--g2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(108, 43, 217, 0.15) 0%, rgba(224, 64, 251, 0.08) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+    }
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--g4);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 900;
+      letter-spacing: -3px;
+      line-height: 0.95;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--g1) 0%, var(--g2) 35%, var(--g3) 70%, var(--g4) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--g1), var(--g2));
+      color: #fff;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(224, 64, 251, 0.3);
+    }
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--g2);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--g2), var(--g3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      font-size: 1.15rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── THE STACK ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .stack-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stack-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .stack-card:nth-child(1)::before { background: linear-gradient(90deg, var(--g1), var(--g2)); }
+    .stack-card:nth-child(2)::before { background: linear-gradient(90deg, var(--g2), var(--g3)); }
+    .stack-card:nth-child(3)::before { background: linear-gradient(90deg, var(--g3), var(--g4)); }
+    .stack-card:hover {
+      border-color: var(--g2);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+    .stack-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+    .stack-card:nth-child(1) .stack-icon { background: rgba(108, 43, 217, 0.15); }
+    .stack-card:nth-child(2) .stack-icon { background: rgba(224, 64, 251, 0.15); }
+    .stack-card:nth-child(3) .stack-icon { background: rgba(0, 229, 255, 0.15); }
+    .stack-card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .stack-card p { color: var(--text-dim); font-size: 0.95rem; }
+    .stack-tag {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .stack-card:nth-child(1) .stack-tag { background: rgba(108, 43, 217, 0.15); color: #a78bfa; }
+    .stack-card:nth-child(2) .stack-tag { background: rgba(224, 64, 251, 0.15); color: #e879f9; }
+    .stack-card:nth-child(3) .stack-tag { background: rgba(0, 229, 255, 0.15); color: #67e8f9; }
+
+    /* ── PIPELINE ── */
+    .pipeline-section { background: var(--card); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+    .pipeline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      padding: 2rem 0;
+    }
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.5rem 2rem;
+      position: relative;
+    }
+    .pipeline-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+    .pipeline-step:nth-child(1) .pipeline-num { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; }
+    .pipeline-step:nth-child(3) .pipeline-num { background: linear-gradient(135deg, var(--g2), var(--g3)); color: #fff; }
+    .pipeline-step:nth-child(5) .pipeline-num { background: linear-gradient(135deg, var(--g3), var(--g4)); color: #000; }
+    .pipeline-step:nth-child(7) .pipeline-num { background: linear-gradient(135deg, var(--g4), #ffea00); color: #000; }
+    .pipeline-step span:last-child {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .pipeline-arrow {
+      font-size: 1.8rem;
+      color: var(--text-dim);
+      padding: 0 0.5rem;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature {
+      padding: 2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      transition: all 0.3s;
+    }
+    .feature:hover {
+      border-color: var(--card-border);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .feature h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .feature p { color: var(--text-dim); font-size: 0.9rem; }
+
+    /* ── CODE BLOCK ── */
+    .code-section { text-align: center; }
+    .code-block {
+      background: #0d0d18;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    .code-block pre {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .code-comment { color: #6a6a80; }
+    .code-keyword { color: #c084fc; }
+    .code-string { color: #34d399; }
+    .code-fn { color: #60a5fa; }
+    .code-var { color: #f9a8d4; }
+    .code-op { color: #fbbf24; }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      position: relative;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section .section-title { margin-bottom: 1rem; }
+    .cta-section .section-desc { margin: 0 auto 2.5rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+    }
+    .footer-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--g1), var(--g2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+    .footer-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--text-dim); font-size: 0.8rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .pipeline { flex-direction: column; gap: 0; }
+      .pipeline-arrow { transform: rotate(90deg); padding: 0.25rem 0; }
+      .stack-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* ── WIREFRAME BACKGROUND ── */
+    #wireframe-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PERSISTENT WIREFRAME BACKGROUND -->
+  <canvas id="wireframe-bg"></canvas>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Alpaca3D</div>
+    <ul class="nav-links">
+      <li><a href="#stack">The Stack</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      AI + 3D Printing
+    </div>
+    <h1>Alpaca3D</h1>
+    <p>Where Claude Code meets Flashforge AD5M Pro. Intelligent 3D printing orchestrated through the OpenClaw pipeline.</p>
+    <div class="hero-cta">
+      <a href="#stack" class="btn btn-primary">Explore the Stack</a>
+      <a href="https://github.com/cryptokoh/alpacca3d" class="btn btn-secondary" target="_blank">View Source</a>
+    </div>
+  </section>
+
+  <!-- THE STACK -->
+  <section id="stack">
+    <div class="container fade-in">
+      <div class="section-label">The Stack</div>
+      <h2 class="section-title">Three layers. One pipeline.</h2>
+      <p class="section-desc">Each layer handles what it does best — intelligence, translation, and fabrication.</p>
+      <div class="stack-grid">
+
+        <div class="stack-card">
+          <div class="stack-icon">&#129302;</div>
+          <h3>Claude Code</h3>
+          <p>AI reasoning engine that understands your intent, generates optimized G-code parameters, troubleshoots print issues, and iterates on designs through natural language.</p>
+          <span class="stack-tag">INTELLIGENCE LAYER</span>
+        </div>
+
+        <div class="stack-card">
+          <div class="stack-icon">&#128268;</div>
+          <h3>OpenClaw</h3>
+          <p>Open-source bridge between AI commands and printer firmware. Translates high-level instructions into precise machine operations with real-time feedback loops.</p>
+          <span class="stack-tag">TRANSLATION LAYER</span>
+        </div>
+
+        <div class="stack-card">
+          <div class="stack-icon">&#9881;&#65039;</div>
+          <h3>Flashforge AD5M Pro</h3>
+          <p>High-speed CoreXY printer running Klipper firmware. 600mm/s capable with auto-leveling, filament detection, and network control built in.</p>
+          <span class="stack-tag">FABRICATION LAYER</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section id="pipeline" class="pipeline-section">
+    <div class="container fade-in">
+      <div class="section-label" style="text-align:center;">How It Works</div>
+      <h2 class="section-title" style="text-align:center;">From idea to object</h2>
+      <p class="section-desc" style="text-align:center; margin-left:auto; margin-right:auto;">The full AI-to-print pipeline in four steps.</p>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="pipeline-num">1</div>
+          <span>Describe</span>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-num">2</div>
+          <span>Generate</span>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-num">3</div>
+          <span>Translate</span>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-num">4</div>
+          <span>Print</span>
+        </div>
+      </div>
+      <div class="code-block">
+        <pre><span class="code-comment">// Alpaca3D pipeline</span>
+<span class="code-keyword">const</span> <span class="code-var">idea</span> <span class="code-op">=</span> <span class="code-string">"phone stand with cable management"</span>;
+
+<span class="code-keyword">const</span> <span class="code-var">design</span>  <span class="code-op">=</span> <span class="code-keyword">await</span> <span class="code-fn">claude</span>.<span class="code-fn">generate</span>(idea);      <span class="code-comment">// AI designs it</span>
+<span class="code-keyword">const</span> <span class="code-var">gcode</span>   <span class="code-op">=</span> <span class="code-keyword">await</span> <span class="code-fn">openclaw</span>.<span class="code-fn">translate</span>(design); <span class="code-comment">// OpenClaw slices it</span>
+<span class="code-keyword">const</span> <span class="code-var">result</span>  <span class="code-op">=</span> <span class="code-keyword">await</span> <span class="code-fn">ad5m</span>.<span class="code-fn">print</span>(gcode);          <span class="code-comment">// AD5M Pro prints it</span>
+
+<span class="code-fn">console</span>.<span class="code-fn">log</span>(<span class="code-var">result</span>.<span class="code-var">status</span>); <span class="code-comment">// "complete" &#10003;</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container fade-in">
+      <div class="section-label">Capabilities</div>
+      <h2 class="section-title">Built for real workflows</h2>
+      <p class="section-desc">Not just a concept — these are the things you can actually do today.</p>
+      <div class="features-grid">
+
+        <div class="feature">
+          <div class="feature-icon">&#128225;</div>
+          <h3>Remote Control</h3>
+          <p>Start, pause, and monitor prints from anywhere through the network API.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">&#129504;</div>
+          <h3>AI Troubleshooting</h3>
+          <p>Claude analyzes failed prints, suggests parameter changes, and prevents repeat failures.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">&#9889;</div>
+          <h3>Automated Workflows</h3>
+          <p>Chain together design, slicing, and printing into single natural-language commands.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">&#128200;</div>
+          <h3>Print Analytics</h3>
+          <p>Track material usage, success rates, and print time optimization across jobs.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">&#128736;</div>
+          <h3>Parameter Tuning</h3>
+          <p>AI-optimized temperature, speed, and retraction settings for any filament type.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">&#128640;</div>
+          <h3>Klipper Native</h3>
+          <p>Direct integration with Klipper firmware for maximum speed and precision control.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container fade-in">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">Ready to print smarter?</h2>
+      <p class="section-desc">Alpaca3D is open source. Explore the repo, fork it, and start building your own AI-powered print farm.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/cryptokoh/alpacca3d" class="btn btn-primary" target="_blank">Star on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Alpaca3D</div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/cryptokoh/alpacca3d" target="_blank">GitHub</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#features">Features</a></li>
+    </ul>
+    <p class="footer-copy">Built with Claude Code. Powered by caffeine and filament.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ── 3D WIREFRAME ALPACA BACKGROUND ──
+    (function() {
+      const canvas = document.getElementById('wireframe-bg');
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 2, 12);
+      camera.lookAt(0, 1, 0);
+
+      // Gradient wireframe material helper
+      function wireMat(color) {
+        return new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: 0.6 });
+      }
+
+      const alpacaGroup = new THREE.Group();
+
+      // ── BUILD ALPACA FROM PRIMITIVES ──
+
+      // Body - elongated ellipsoid
+      const bodyGeo = new THREE.SphereGeometry(1.4, 16, 12);
+      bodyGeo.scale(1.3, 0.9, 0.85);
+      const body = new THREE.Mesh(bodyGeo, wireMat(0x8b5cf6));
+      body.position.set(0, 2.2, 0);
+      alpacaGroup.add(body);
+
+      // Fluffy wool layer
+      const woolGeo = new THREE.IcosahedronGeometry(1.55, 1);
+      woolGeo.scale(1.2, 0.85, 0.8);
+      const wool = new THREE.Mesh(woolGeo, wireMat(0xa78bfa));
+      wool.position.set(0, 2.35, 0);
+      alpacaGroup.add(wool);
+
+      // Neck
+      const neckGeo = new THREE.CylinderGeometry(0.35, 0.5, 2.2, 10);
+      const neck = new THREE.Mesh(neckGeo, wireMat(0xc084fc));
+      neck.position.set(1.1, 3.6, 0);
+      neck.rotation.z = -0.25;
+      alpacaGroup.add(neck);
+
+      // Neck fluff
+      const neckFluffGeo = new THREE.IcosahedronGeometry(0.55, 1);
+      neckFluffGeo.scale(0.7, 1.6, 0.7);
+      const neckFluff = new THREE.Mesh(neckFluffGeo, wireMat(0xd8b4fe));
+      neckFluff.position.set(1.0, 3.5, 0);
+      alpacaGroup.add(neckFluff);
+
+      // Head
+      const headGeo = new THREE.SphereGeometry(0.6, 12, 10);
+      headGeo.scale(0.85, 1, 0.8);
+      const head = new THREE.Mesh(headGeo, wireMat(0xe879f9));
+      head.position.set(1.35, 4.9, 0);
+      alpacaGroup.add(head);
+
+      // Head floof (top tuft)
+      const floofGeo = new THREE.IcosahedronGeometry(0.5, 1);
+      floofGeo.scale(0.8, 0.6, 0.7);
+      const floof = new THREE.Mesh(floofGeo, wireMat(0xf0abfc));
+      floof.position.set(1.25, 5.45, 0);
+      alpacaGroup.add(floof);
+
+      // Snout
+      const snoutGeo = new THREE.SphereGeometry(0.3, 10, 8);
+      snoutGeo.scale(0.7, 0.65, 0.7);
+      const snout = new THREE.Mesh(snoutGeo, wireMat(0xf9a8d4));
+      snout.position.set(1.8, 4.7, 0);
+      alpacaGroup.add(snout);
+
+      // Ears
+      function makeEar(zOff) {
+        const earGeo = new THREE.ConeGeometry(0.15, 0.55, 6);
+        const ear = new THREE.Mesh(earGeo, wireMat(0xe040fb));
+        ear.position.set(1.15, 5.45, zOff);
+        ear.rotation.z = 0.3;
+        ear.rotation.x = zOff > 0 ? -0.2 : 0.2;
+        return ear;
+      }
+      alpacaGroup.add(makeEar(0.35));
+      alpacaGroup.add(makeEar(-0.35));
+
+      // Eyes (small spheres)
+      function makeEye(zOff) {
+        const eyeGeo = new THREE.SphereGeometry(0.06, 6, 6);
+        const eye = new THREE.Mesh(eyeGeo, wireMat(0x00e5ff));
+        eye.position.set(1.7, 5.0, zOff);
+        return eye;
+      }
+      alpacaGroup.add(makeEye(0.2));
+      alpacaGroup.add(makeEye(-0.2));
+
+      // Legs
+      function makeLeg(x, z) {
+        const legGroup = new THREE.Group();
+        // Upper leg
+        const upperGeo = new THREE.CylinderGeometry(0.18, 0.22, 1.1, 8);
+        const upper = new THREE.Mesh(upperGeo, wireMat(0x7c3aed));
+        upper.position.set(0, -0.55, 0);
+        legGroup.add(upper);
+        // Lower leg
+        const lowerGeo = new THREE.CylinderGeometry(0.14, 0.16, 0.9, 8);
+        const lower = new THREE.Mesh(lowerGeo, wireMat(0x6d28d9));
+        lower.position.set(0, -1.35, 0);
+        legGroup.add(lower);
+        // Hoof
+        const hoofGeo = new THREE.CylinderGeometry(0.18, 0.2, 0.15, 8);
+        const hoof = new THREE.Mesh(hoofGeo, wireMat(0x00e5ff));
+        hoof.position.set(0, -1.87, 0);
+        legGroup.add(hoof);
+        legGroup.position.set(x, 1.5, z);
+        return legGroup;
+      }
+      alpacaGroup.add(makeLeg(0.8, 0.4));   // front-right
+      alpacaGroup.add(makeLeg(0.8, -0.4));  // front-left
+      alpacaGroup.add(makeLeg(-0.8, 0.4));  // back-right
+      alpacaGroup.add(makeLeg(-0.8, -0.4)); // back-left
+
+      // Tail
+      const tailGeo = new THREE.SphereGeometry(0.35, 8, 6);
+      tailGeo.scale(0.6, 0.8, 0.5);
+      const tail = new THREE.Mesh(tailGeo, wireMat(0x76ff03));
+      tail.position.set(-1.6, 2.6, 0);
+      alpacaGroup.add(tail);
+
+      // Center the group
+      alpacaGroup.position.set(0, -2.2, 0);
+      scene.add(alpacaGroup);
+
+      // ── FLOATING PARTICLES ──
+      const particleCount = 120;
+      const particleGeo = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 20;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 16;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+      }
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const particleMat = new THREE.PointsMaterial({
+        color: 0x6c2bd9,
+        size: 0.04,
+        transparent: true,
+        opacity: 0.5
+      });
+      const particles = new THREE.Points(particleGeo, particleMat);
+      scene.add(particles);
+
+      // ── RAINBOW SPIT SYSTEM ──
+      const rainbowColors = [0xff0000, 0xff8800, 0xffff00, 0x00ff00, 0x0088ff, 0x8800ff, 0xff00ff];
+      const spitParticles = [];
+      let lastScrollY = window.scrollY;
+      let spitCooldown = 0;
+
+      function getSnoutWorldPos() {
+        const pos = new THREE.Vector3(1.8, 4.7, 0);
+        alpacaGroup.localToWorld(pos);
+        return pos;
+      }
+
+      function spawnRainbowSpit() {
+        const origin = getSnoutWorldPos();
+        const burstCount = 8 + Math.floor(Math.random() * 12);
+        for (let i = 0; i < burstCount; i++) {
+          const color = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
+          const size = 0.04 + Math.random() * 0.1;
+          const geo = Math.random() > 0.5
+            ? new THREE.IcosahedronGeometry(size, 0)
+            : new THREE.OctahedronGeometry(size, 0);
+          const mat = new THREE.MeshBasicMaterial({
+            color,
+            wireframe: true,
+            transparent: true,
+            opacity: 1.0
+          });
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.copy(origin);
+          // Spray outward from snout direction with spread
+          const dir = new THREE.Vector3(
+            0.8 + Math.random() * 0.5,
+            0.2 + Math.random() * 0.6 - 0.3,
+            (Math.random() - 0.5) * 0.8
+          );
+          dir.applyQuaternion(alpacaGroup.quaternion);
+          dir.normalize().multiplyScalar(0.06 + Math.random() * 0.08);
+          mesh.userData.vel = dir;
+          mesh.userData.life = 1.0;
+          mesh.userData.decay = 0.008 + Math.random() * 0.012;
+          mesh.userData.spin = new THREE.Vector3(
+            (Math.random() - 0.5) * 0.2,
+            (Math.random() - 0.5) * 0.2,
+            (Math.random() - 0.5) * 0.2
+          );
+          scene.add(mesh);
+          spitParticles.push(mesh);
+        }
+      }
+
+      // Trigger spit randomly on scroll
+      window.addEventListener('scroll', () => {
+        const delta = Math.abs(window.scrollY - lastScrollY);
+        lastScrollY = window.scrollY;
+        if (delta > 5 && spitCooldown <= 0 && Math.random() < 0.4) {
+          spawnRainbowSpit();
+          spitCooldown = 12 + Math.floor(Math.random() * 20); // frames cooldown
+        }
+      });
+
+      function updateSpitParticles() {
+        if (spitCooldown > 0) spitCooldown--;
+        for (let i = spitParticles.length - 1; i >= 0; i--) {
+          const p = spitParticles[i];
+          // Move
+          p.position.add(p.userData.vel);
+          // Gravity
+          p.userData.vel.y -= 0.001;
+          // Spin
+          p.rotation.x += p.userData.spin.x;
+          p.rotation.y += p.userData.spin.y;
+          p.rotation.z += p.userData.spin.z;
+          // Fade
+          p.userData.life -= p.userData.decay;
+          p.material.opacity = Math.max(0, p.userData.life);
+          // Scale down as they fade
+          const s = Math.max(0.1, p.userData.life);
+          p.scale.set(s, s, s);
+          // Remove dead particles
+          if (p.userData.life <= 0) {
+            scene.remove(p);
+            p.geometry.dispose();
+            p.material.dispose();
+            spitParticles.splice(i, 1);
+          }
+        }
+      }
+
+      // ── ANIMATION ──
+      let mouseX = 0, mouseY = 0;
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+
+        // Slow auto-rotation
+        alpacaGroup.rotation.y += 0.003;
+        // Gentle floating motion
+        alpacaGroup.position.y = -2.2 + Math.sin(t * 0.5) * 0.3;
+        // Mouse parallax
+        alpacaGroup.rotation.x += (mouseY * 0.15 - alpacaGroup.rotation.x) * 0.02;
+        alpacaGroup.rotation.z += (mouseX * -0.08 - alpacaGroup.rotation.z) * 0.02;
+
+        // Animate wool to "breathe"
+        const breathe = 1 + Math.sin(t * 1.2) * 0.03;
+        wool.scale.set(breathe, breathe, breathe);
+
+        // Rotate particles slowly
+        particles.rotation.y = t * 0.05;
+        particles.rotation.x = t * 0.02;
+
+        // Ear wiggle
+        alpacaGroup.children.forEach((child) => {
+          if (child.geometry && child.geometry.type === 'ConeGeometry') {
+            child.rotation.z = 0.3 + Math.sin(t * 2 + child.position.z * 5) * 0.1;
+          }
+        });
+
+        // Update rainbow spit particles
+        updateSpitParticles();
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    })();
+  </script>
+
+  <script>
+    // Scroll-triggered fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+</body>
+</html>
