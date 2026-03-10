@@ -14,8 +14,8 @@
       --g3: #00e5ff;
       --g4: #76ff03;
       --bg: #0a0a0f;
-      --card: #14141f;
-      --card-border: #2a2a3a;
+      --card: rgba(20, 20, 31, 0.45);
+      --card-border: rgba(42, 42, 58, 0.5);
       --text: #e8e8f0;
       --text-dim: #9898a8;
       --radius: 16px;
@@ -202,6 +202,8 @@
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
     .stack-card::before {
       content: '';
@@ -252,7 +254,7 @@
     .stack-card:nth-child(3) .stack-tag { background: rgba(0, 229, 255, 0.15); color: #67e8f9; }
 
     /* ── PIPELINE ── */
-    .pipeline-section { background: var(--card); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+    .pipeline-section { background: var(--card); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     .pipeline {
       display: flex;
       align-items: center;
@@ -305,6 +307,8 @@
       border: 1px solid var(--card-border);
       background: var(--card);
       transition: all 0.3s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
     .feature:hover {
       border-color: var(--card-border);
@@ -324,7 +328,7 @@
     /* ── CODE BLOCK ── */
     .code-section { text-align: center; }
     .code-block {
-      background: #0d0d18;
+      background: rgba(13, 13, 24, 0.5);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 2rem;
