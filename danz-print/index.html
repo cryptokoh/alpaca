@@ -611,9 +611,13 @@
   <script>
     // ── 3D WIREFRAME ALPACA BACKGROUND ──
     (function() {
+      if (typeof THREE === 'undefined') return;
       const canvas = document.getElementById('wireframe-bg');
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      let renderer;
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
+      } catch(e) { return; }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       renderer.setSize(window.innerWidth, window.innerHeight);
 
       const scene = new THREE.Scene();
